@@ -1,20 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#000000">
-  <link rel="manifest" href="manifest.json">
-  <title>Mi PWA</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Puntos</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Mi PWA Sencilla</h1>
-  <input type="text" id="input" placeholder="Escribe algo...">
-  <button onclick="guardarDato()">Guardar</button>
-  <h3>Dato guardado:</h3>
-  <p id="datoGuardado">Nada guardado aún</p>
-
-  <script src="script.js"></script>
+    <div id="app">
+        <div id="contenido"></div>
+        <button id="siguienteBtn">Siguiente</button>
+    </div>
+    <script src="app.js"></script>
 </body>
 </html>
