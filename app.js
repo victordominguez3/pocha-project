@@ -10,24 +10,43 @@ function mostrarPantalla() {
     contenido.innerHTML = '';
 
     if (estado === 'jugadores') {
-        if (viewModel.seHanIngresadoTodosLosJugadores()) {
-            viewModel.avanzarPantalla();  // Pasar a la pantalla de puntos
-        } else {
-            contenido.innerHTML = `
-                <h2>Jugador ${viewModel.indiceJugador + 1}</h2>
-                <input type="text" id="nombre" placeholder="Nombre del jugador" />
-            `;
-            document.getElementById('nombre').focus();
+        contenido.innerHTML = `
+            <h2>Jugador ${viewModel.indiceJugador + 1}</h2>
+            <input type="text" id="nombre" placeholder="Nombre del jugador" />
+            <button id="agregarBtn">Aceptar</button>
+            <h3>Jugadores ingresados:</h3>
+            <ul id="listaJugadores"></ul>
+            <button id="siguienteBtn">Siguiente</button>
+        `;
 
-            siguienteBtn.onclick = () => {
-                const nombre = document.getElementById('nombre').value;
-                if (nombre) {
-                    viewModel.agregarJugador(nombre);
-                    viewModel.avanzarPantalla(); // Avanzar a la siguiente pantalla de jugador
-                    mostrarPantalla();
-                }
-            };
+        const nombreInput = document.getElementById('nombre');
+        const agregarBtn = document.getElementById('agregarBtn');
+        const listaJugadores = document.getElementById('listaJugadores');
+        const siguienteBtn = document.getElementById('siguienteBtn');
+
+        function actualizarListaJugadores() {
+            listaJugadores.innerHTML = '';
+            viewModel.getJugadores().forEach(jugador => {
+                const li = document.createElement('li');
+                li.textContent = jugador.nombre;
+                listaJugadores.appendChild(li);
+            });
         }
+
+        agregarBtn.onclick = () => {
+            const nombre = nombreInput.value.trim();
+            if (nombre) {
+                viewModel.agregarJugador(nombre);
+                nombreInput.value = '';
+                actualizarListaJugadores();
+            }
+        };
+
+        siguienteBtn.onclick = () => {
+            viewModel.avanzarPantalla();
+            mostrarPantalla();
+        };
+        
     } else if (estado === 'puntos') {
         const jugador = viewModel.getJugadorActual();
         contenido.innerHTML = `
