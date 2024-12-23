@@ -21,7 +21,6 @@ function mostrarPantalla() {
         const nombreInput = document.getElementById('nombre');
         const agregarBtn = document.getElementById('agregarBtn');
         const listaJugadores = document.getElementById('listaJugadores');
-        const siguienteBtn = document.getElementById('siguienteBtn');
 
         function actualizarListaJugadores() {
             listaJugadores.innerHTML = '';
