@@ -3,10 +3,12 @@ const urlsToCache = [
   "./",
   "/index.html",
   "/style.css",
-  "/script.js",
+  "/app.js",
   "/manifest.json",
   "/apple-touch-icon.png",
-  "/android-chrome-512x512.png"
+  "/android-chrome-512x512.png",
+  "/model.js",
+  "/viewModel.js"
 ];
 
 // Instalar el Service Worker y guardar en caché

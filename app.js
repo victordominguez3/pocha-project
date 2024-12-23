@@ -16,7 +16,6 @@ function mostrarPantalla() {
             <button id="agregarBtn">Aceptar</button>
             <h3>Jugadores ingresados:</h3>
             <ul id="listaJugadores"></ul>
-            <button id="siguienteBtn">Siguiente</button>
         `;
 
         const nombreInput = document.getElementById('nombre');
