@@ -12,30 +12,44 @@ function mostrarPantalla() {
     if (estado === 'jugadores') {
         contenido.innerHTML = `
             <input type="text" id="nombre" placeholder="Nombre del jugador" />
-            <button id="agregarBtn">Aceptar</button>
+            <button id="agregarBtn" class="btn">Aceptar</button>
+            <p id="error" class="error">No puede haber dos jugadores con el mismo nombre</p>
             <h3>Jugadores ingresados:</h3>
-            <ul id="listaJugadores"></ul>
+            <table id="tablaJugadores" style="width: 100%; border-collapse: collapse; margin: 0 auto;">
+                <tbody id="tablaCuerpo">
+                    
+                </tbody>
+            </table>
         `;
 
         const nombreInput = document.getElementById('nombre');
         const agregarBtn = document.getElementById('agregarBtn');
-        const listaJugadores = document.getElementById('listaJugadores');
+        const tablaCuerpo = document.getElementById('tablaCuerpo');
+        const error = document.getElementById('error');
 
-        function actualizarListaJugadores() {
-            listaJugadores.innerHTML = '';
+        function actualizarTablaJugadores() {
+            tablaCuerpo.innerHTML = ''; // Limpiar la tabla antes de agregar nuevos jugadores
             viewModel.getJugadores().forEach(jugador => {
-                const li = document.createElement('li');
-                li.textContent = jugador.nombre;
-                listaJugadores.appendChild(li);
+                const tr = document.createElement('tr');
+                const td = document.createElement('td');
+                td.textContent = jugador.nombre;
+                tr.appendChild(td);
+                tablaCuerpo.appendChild(tr);
             });
+            if (viewModel.getJugadores().length > 1) {
+                siguienteBtn.disabled = false;
+            }
         }
 
         agregarBtn.onclick = () => {
-            const nombre = nombreInput.value.trim();
-            if (nombre) {
+            const nombre = nombreInput.value.charAt(0).toUpperCase() + nombreInput.value.slice(1);
+            if (viewModel.getJugadores().some(jugador => jugador.nombre === nombre)) {
+                error.style.display = 'block';
+            } else if (nombre) {
                 viewModel.agregarJugador(nombre);
-                nombreInput.value = '';
-                actualizarListaJugadores();
+                error.style.display = 'none';
+                nombreInput.value = ''; // Limpiar el input
+                actualizarTablaJugadores(); // Actualizar la tabla con el nuevo jugador
             }
         };
 

@@ -1,30 +1,82 @@
 body {
   font-family: Arial, sans-serif;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-  background-color: #f0f0f0;
+  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: center; /* Centra el contenido verticalmente */
+  height: 100vh; /* Usa el 100% de la altura de la pantalla */
+  margin: 0; /* Elimina cualquier margen por defecto */
+  background-color: #f0f0f0; /* Color de fondo */
 }
 
 #app {
   text-align: center;
   width: 100%;
-  max-width: 400px;
+  max-width: 400px; /* Limita el ancho máximo del contenido */
 }
 
-#siguienteBtn {
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
+table {
+  width: 80%; /* La tabla ocupará el 80% del ancho disponible */
+  border-collapse: collapse; /* Para evitar el espacio entre las celdas */
+  margin-bottom: 20px; /* Espacio debajo de la tabla */
 }
 
-#siguienteBtn:disabled {
-  background-color: #ccc;
+th, td {
+  padding: 8px; /* Espaciado interno */
+  text-align: center; /* Centra el texto */
+}
+
+.btn {
+  height: 35px;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+  background-color: #00c99d; /* Color de fondo */
+  color: black; /* Color del texto */
+  border: none; /* Sin bordes */
+  cursor: pointer; /* Cursor de puntero */
+  margin-top: 20px; /* Espacio encima del botón */
+  font-size: 16px; /* Tamaño del texto */
+  border-radius: 10px; /* Bordes redondeados */
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn:hover {
+  background-color: #009e7c; /* Color de fondo cuando pasas el ratón */
+}
+
+.btn:disabled {
+  height: 35px;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+  background-color: #84b1a7; /* Color de fondo */
+  color: white; /* Color del texto */
+  border: none; /* Sin bordes */
+  cursor: not-allowed; /* Cursor de puntero */
+  margin-top: 20px; /* Espacio encima del botón */
+  font-size: 16px; /* Tamaño del texto */
+  border-radius: 10px; /* Bordes redondeados */
+}
+
+input {
+  height: 29px;
+  padding-left: 10px;
+  border: 2px solid #00c99d; /* Borde de 2px y color verde */
+  border-radius: 10px; /* Bordes redondeados */
+  outline: none; /* Elimina el borde azul que aparece al hacer clic (si no lo deseas) */
+  font-size: 16px; /* Tamaño del texto dentro del input */
+  background-color: transparent;
+  transition: border-color 0.2s ease-in-out;
+}
+
+input:focus {
+  border-color: #009e7c; /* Color más oscuro para el borde cuando el input tiene foco */
+}
+
+.error {
+  color: rgb(165, 0, 0);
+  font-size: 12px;
+  display: none;
 }

@@ -12,6 +12,7 @@ class Partida {
         this.cartas = 0;
         this.rondas = ((this.cartas/this.jugadores.length) * 2) + (this.jugadores - 2)
         this.rondaActual = 0;
+        this.rondaCount = 0;
         this.isOros = false;
         this.estado = 'jugadores';
     }
@@ -48,9 +49,9 @@ class Partida {
     avanzarEstado() {
         if (this.estado === 'jugadores') {
             this.estado = 'ronda';
-        } else if (this.estado === 'ronda' && this.rondaActual < this.rondas) {
+        } else if (this.estado === 'ronda' && this.rondaCount < this.rondas) {
             this.estado = 'ronda';
-        } else if (this.estado === 'ronda' && this.rondaActual === this.rondas) {
+        } else if (this.estado === 'ronda' && this.rondaCount === this.rondas) {
             this.estado = 'fin';
         }
     }
