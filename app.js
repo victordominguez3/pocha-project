@@ -11,7 +11,6 @@ function mostrarPantalla() {
 
     if (estado === 'jugadores') {
         contenido.innerHTML = `
-            <h2>Jugador ${viewModel.indiceJugador + 1}</h2>
             <input type="text" id="nombre" placeholder="Nombre del jugador" />
             <button id="agregarBtn">Aceptar</button>
             <h3>Jugadores ingresados:</h3>
