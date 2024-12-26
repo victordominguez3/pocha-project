@@ -312,12 +312,7 @@ function mostrarPantalla() {
         };
     } else if (estado === 'fin') {
         
-        const jugadores = [
-            new Jugador("Victor", 50),
-            new Jugador("Sara", 50),
-            new Jugador("Habiba", 50),
-            new Jugador("Rares", 1)
-        ]
+        const jugadores = viewModel.getJugadores();
 
         // Ordena los jugadores según su puntuación (de mayor a menor)
         jugadores.sort((a, b) => b.puntos - a.puntos);

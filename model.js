@@ -14,7 +14,7 @@ class Partida {
         this.rondaActual = 0;
         this.rondaCount = 0;
         this.isOros = false;
-        this.estado = 'fin';
+        this.estado = 'jugadores';
     }
 
     agregarJugador(nombre) {
