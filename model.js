@@ -14,7 +14,7 @@ class Partida {
         this.rondaActual = 0;
         this.rondaCount = 0;
         this.isOros = false;
-        this.estado = 'jugadores';
+        this.estado = 'fin';
     }
 
     agregarJugador(nombre) {
@@ -32,7 +32,7 @@ class Partida {
 
     agregarCartas(cartas) {
         this.cartas = cartas;
-        this.rondas = ((this.cartas/this.jugadores.length) * 2) + (this.jugadores - 2)
+        this.rondas = ((this.cartas/this.jugadores.length) * 2) + (this.jugadores.length - 2)
     }
 
     agregarApuesta(nombre, apuesta) {

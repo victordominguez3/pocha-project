@@ -25,10 +25,8 @@ class ViewModel {
         this.partida.agregarApuesta(nombre, apuesta);
     }
 
-    agregarPuntos(puntos) {
-        if (this.partida.estado === 'puntos') {
-            this.partida.agregarPuntos(nombre, puntos);
-        }
+    agregarPuntos(nombre, puntos) {
+        this.partida.agregarPuntos(nombre, puntos);
     }
 
     getEstado() {
