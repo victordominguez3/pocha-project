@@ -9,8 +9,20 @@ class ViewModel {
         this.partida.agregarJugador(nombre);
     }
 
+    siguienteJugador() {
+        return this.partida.siguienteJugador();
+    }
+
     avanzarPantalla() {
         this.partida.avanzarEstado();
+    }
+
+    agregarCartas(cartas) {
+        this.partida.agregarCartas(cartas);
+    }
+
+    agregarApuesta(nombre, apuesta) {
+        this.partida.agregarApuesta(nombre, apuesta);
     }
 
     agregarPuntos(puntos) {
@@ -23,8 +35,16 @@ class ViewModel {
         return this.partida.estado;
     }
 
+    setOros(bool) {
+        this.partida.isOros = bool;
+    }
+
     getJugadores() {
         return this.partida.jugadores;
+    }
+
+    getRondaActual() {
+        return this.partida.rondaActual;
     }
 }
 

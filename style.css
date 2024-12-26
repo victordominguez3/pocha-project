@@ -5,7 +5,7 @@ body {
   align-items: center; /* Centra el contenido verticalmente */
   height: 100vh; /* Usa el 100% de la altura de la pantalla */
   margin: 0; /* Elimina cualquier margen por defecto */
-  background-color: #f0f0f0; /* Color de fondo */
+  background-color: #e1fff9; /* Color de fondo */
 }
 
 #app {
@@ -52,7 +52,6 @@ th, td {
   padding-right: 10px;
   padding-bottom: 5px;
   background-color: #84b1a7; /* Color de fondo */
-  color: white; /* Color del texto */
   border: none; /* Sin bordes */
   cursor: not-allowed; /* Cursor de puntero */
   margin-top: 20px; /* Espacio encima del botón */
@@ -79,4 +78,38 @@ input:focus {
   color: rgb(165, 0, 0);
   font-size: 12px;
   display: none;
+}
+
+input[type="number"] {
+  height: 20px;
+  width: 50px;           /* Ajusta el tamaño del campo de entrada */
+  padding: 5px;          /* Ajusta el espaciado interno */
+  font-size: 16px;       /* Cambia el tamaño de la fuente */
+  text-align: center;    /* Centra el número */
+  border: 2px solid #00c99d; /* Borde de 2px de color verde */
+  border-radius: 10px;   /* Bordes redondeados */
+  transition: border 0.2s ease-in-out;
+  margin-left: 10px;
+}
+
+input[type="number"]:focus {
+  border: 2px solid #009e7c;
+}
+
+.btnpng {
+  background-color: #00c99d; /* Color de fondo */
+  color: black; /* Color del texto */
+  border: 3px solid transparent; /* Sin bordes */
+  cursor: pointer; /* Cursor de puntero */
+  font-size: 16px; /* Tamaño del texto */
+  border-radius: 10px; /* Bordes redondeados */
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btnpng:hover {
+  background-color: #009e7c; /* Color de fondo cuando pasas el ratón */
+}
+
+.selected {
+  border: 3px solid #005543; /* Color dorado para el borde */
 }

@@ -8,7 +8,11 @@ const urlsToCache = [
   "/apple-touch-icon.png",
   "/android-chrome-512x512.png",
   "/model.js",
-  "/viewModel.js"
+  "/viewModel.js",
+  "/basto.png",
+  "/copa.png",
+  "/espada.png",
+  "/oro.png"
 ];
 
 // Instalar el Service Worker y guardar en caché
