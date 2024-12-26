@@ -312,7 +312,12 @@ function mostrarPantalla() {
         };
     } else if (estado === 'fin') {
         
-        const jugadores = viewModel.getJugadores();
+        const jugadores = [
+            new Jugador("Victor", 50),
+            new Jugador("Sara", 50),
+            new Jugador("Habiba", 50),
+            new Jugador("Rares", 1)
+        ]
 
         // Ordena los jugadores según su puntuación (de mayor a menor)
         jugadores.sort((a, b) => b.puntos - a.puntos);
@@ -335,10 +340,13 @@ function mostrarPantalla() {
 
         // Actualiza el contenido
         contenido.innerHTML = `
-            <h3>${titulo}</h3>
-            <p>${nombresGanadores}</p>
+            <div class="card">
+                <h3>&#x2b50; ${titulo} &#x2b50;</h3>
+                <p>${nombresGanadores}</p>
+            </div>
         `;
 
+        siguienteBtn.style.display = 'none';
     }
 }
 

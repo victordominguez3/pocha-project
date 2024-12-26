@@ -113,3 +113,13 @@ input[type="number"]:focus {
 .selected {
   border: 3px solid #005543; /* Color dorado para el borde */
 }
+
+.card {
+  border: 2px solid #00c99d;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  margin: 0 auto;
+  text-align: center;
+}
