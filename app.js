@@ -292,21 +292,36 @@ function mostrarPantalla() {
 
 function renderApuestas(apuestas, rondaActual) {
     const jugadores = viewModel.getJugadores();
-    contenido.innerHTML = '';
+
+    let html = `
+        <h3>Pedidas</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 0 auto;">
+            <thead>
+                <tr>
+                    <th>Jugador</th>
+                    <th>Apuesta</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
 
     jugadores.forEach((jugador, index) => {
-
-        const div = document.createElement('div');
-        div.classList.add('bloque-jugador');
-        div.innerHTML = `
-            <label for="numero_${index}">
-                ¿Cuánto apuesta <b>${jugador.nombre}</b>?
-            </label>
-            <select id="numero_${index}" data-index="${index}"></select>
+        html += `
+            <tr>
+                <td>${jugador.nombre}</td>
+                <td>
+                    <select id="numero_${index}" data-index="${index}"></select>
+                </td>
+            </tr>
         `;
-
-        contenido.appendChild(div);
     });
+
+    html += `
+            </tbody>
+        </table>
+    `;
+
+    contenido.innerHTML = html;
 
     configurarSelects(apuestas, rondaActual);
 }
@@ -367,21 +382,36 @@ function configurarSelects(apuestas, rondaActual) {
 
 function renderPuntuaciones(puntuaciones, rondaActual) {
     const jugadores = viewModel.getJugadores();
-    contenido.innerHTML = '';
+
+    let html = `
+        <h3>Llevadas</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 0 auto;">
+            <thead>
+                <tr>
+                    <th>Jugador</th>
+                    <th>Puntuación</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
 
     jugadores.forEach((jugador, index) => {
-        const div = document.createElement('div');
-        div.classList.add('bloque-jugador');
-
-        div.innerHTML = `
-            <label for="puntos_${index}">
-                ¿Cuántas rondas ha conseguido <b>${jugador.nombre}</b>?
-            </label>
-            <select id="puntos_${index}" data-index="${index}"></select>
+        html += `
+            <tr>
+                <td>${jugador.nombre}</td>
+                <td>
+                    <select id="puntos_${index}" data-index="${index}"></select>
+                </td>
+            </tr>
         `;
-
-        contenido.appendChild(div);
     });
+
+    html += `
+            </tbody>
+        </table>
+    `;
+
+    contenido.innerHTML = html;
 
     configurarSelectsPuntuacion(puntuaciones, rondaActual);
 }
