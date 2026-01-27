@@ -148,30 +148,64 @@ function mostrarPantalla() {
             copaBtn.addEventListener('click', () => seleccionarBoton(copaBtn));
             espadaBtn.addEventListener('click', () => seleccionarBoton(espadaBtn));
             bastoBtn.addEventListener('click', () => seleccionarBoton(bastoBtn));
-
-            let jugadoresApostados = 0; // Contador de jugadores que han apostado
-            let apuestas = 0; // Array para almacenar las apuestas de cada jugador
-            let selectedNumberApuesta = 0;
-            let apostado = false;
-            let nombreApuesta = '';
             
             siguienteBtn.onclick = () => {
-                if (jugadoresApostados === viewModel.getJugadores().length) {
 
-                    viewModel.agregarApuesta(nombreApuesta, selectedNumberApuesta);
+                const apuestas = {}
 
-                    contenido.innerHTML = `<p>¡A jugar!</p>`; // Mostrar mensaje "¡A jugar!" cuando todos hayan apostado
+                renderApuestas(apuestas, rondaActual);
 
-                    let jugadoresPuntuados = 0; // Contador de jugadores que se han puntuado
-                    let selectedNumberPunutacion = 0;
-                    let puntuado = false;
-                    let nombrePuntuacion = '';
+                siguienteBtn.onclick = () => {
+
+                    const jugadores = viewModel.getJugadores()
+
+                    jugadores.forEach((jugador, index) => {
+                        viewModel.agregarApuesta(jugador.nombre, apuestas[index])
+                    });
+
+                    let html = `
+                        <h3>¡A jugar!</h3>
+                        <table style="width: 100%; border-collapse: collapse; margin: 0 auto;">
+                            <thead>
+                                <tr>
+                                    <th>Jugador</th>
+                                    <th>Apuesta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    jugadores.forEach(j => {
+                        html += `
+                            <tr>
+                                <td>${j.nombre}</td>
+                                <td>${j.apuesta}</td>
+                            </tr>
+                        `;
+                    });
+
+                    html += `
+                            </tbody>
+                        </table>
+                    `; // Mostrar mensaje "¡A jugar!" cuando todos hayan apostado
+
+                    contenido.innerHTML = html;
 
                     siguienteBtn.onclick = () => {
-                        
-                        if (jugadoresPuntuados === viewModel.getJugadores().length) {
-                            
-                            viewModel.agregarPuntos(nombrePuntuacion, selectedNumberPunutacion);
+
+                        siguienteBtn.disabled = true;
+
+                        const puntuaciones = {}
+
+                        renderPuntuaciones(puntuaciones, rondaActual)
+
+                        siguienteBtn.onclick = () => {
+
+                            const jugadores = viewModel.getJugadores()
+
+                            jugadores.forEach((jugador, index) => {
+                                viewModel.agregarPuntos(jugador.nombre, puntuaciones[index])
+                            });
 
                             contenido.innerHTML = `
                                 <h3>Puntuación</h3>
@@ -183,13 +217,13 @@ function mostrarPantalla() {
                             `;
 
                             const tablaCuerpo = document.getElementById('tablaCuerpo');
-                            const jugadores = [...viewModel.getJugadores()];
+                            const jugadoresCopia = [...viewModel.getJugadores()];
                             
                             // Ordena los jugadores según su puntuación (de mayor a menor)
-                            jugadores.sort((a, b) => b.puntos - a.puntos);
+                            jugadoresCopia.sort((a, b) => b.puntos - a.puntos);
 
                             // Agregar las filas a la tabla
-                            jugadores.forEach((jugador, index) => {
+                            jugadoresCopia.forEach((jugador, index) => {
                                 const fila = document.createElement('tr'); // Crea una nueva fila para cada jugador
                                 
                                 // Crea la celda de ranking
@@ -215,97 +249,8 @@ function mostrarPantalla() {
                                     mostrarPantalla();
                                 }
                             });
-
-                        } else {
-
-                            siguienteBtn.disabled = true;
-
-                            if (puntuado) {
-                                viewModel.agregarPuntos(nombrePuntuacion, selectedNumberPunutacion);
-                            }
-
-                            let jugador = viewModel.siguienteJugador();
-
-                            contenido.innerHTML = `
-                                <label for="numero">¿Cuántas rondas ha conseguido <b>${jugador.nombre}</b>?</label>
-                                <select id="numero" name="numero">
-                                    
-                                </select>
-                            `;
-
-                            const selectElement = document.getElementById('numero');
-
-                            // Generar las opciones de rondas según la ronda
-                            for (let i = 0; i <= rondaActual; i++) {
-                                const option = document.createElement('option');
-                                option.value = i;
-                                option.textContent = i;
-                                selectElement.appendChild(option);
-                            }
-
-                            selectElement.selectedIndex = -1;
-                            jugadoresPuntuados++;
-
-                            // Escuchar el cambio en la selección del número de rondas
-                            selectElement.addEventListener('change', function() {
-                                const selectedIndex = selectElement.selectedIndex;  // Obtiene el índice de la opción seleccionada
-                                const selectedOption = selectElement.options[selectedIndex];  // Obtiene la opción seleccionada
-                                const selectedText = selectedOption.textContent;  // El texto (contenido) de la opción seleccionada
-                                selectedNumberPunutacion = parseInt(selectedText, 10);
-                                nombrePuntuacion = jugador.nombre;
-                                puntuado = true;
-                                siguienteBtn.disabled = false;
-                            });
-
                         }
                     };
-
-                } else {
-
-                    siguienteBtn.disabled = true;
-
-                    if (apostado) {
-                        apuestas += selectedNumberApuesta;
-                        viewModel.agregarApuesta(nombreApuesta, selectedNumberApuesta);
-                    }
-
-                    // Obtener el siguiente jugador y actualizar la interfaz
-                    let jugador = viewModel.siguienteJugador();
-
-                    contenido.innerHTML = `
-                        <label for="numero">¿Cuánto apuesta <b>${jugador.nombre}</b>?</label>
-                        <select id="numero" name="numero">
-                            
-                        </select>
-                    `;
-
-                    const selectElement = document.getElementById('numero');
-
-                    // Generar las opciones de apuesta según la ronda
-                    for (let i = 0; i <= rondaActual; i++) {
-                        if ((jugadoresApostados === (viewModel.getJugadores().length - 1)) && (i === (rondaActual - apuestas))) {
-
-                        } else {
-                            const option = document.createElement('option');
-                            option.value = i;
-                            option.textContent = i;
-                            selectElement.appendChild(option);
-                        }
-                    }
-
-                    selectElement.selectedIndex = -1;
-                    jugadoresApostados++;
-
-                    // Escuchar el cambio en la selección del número de apuestas
-                    selectElement.addEventListener('change', function() {
-                        const selectedIndex = selectElement.selectedIndex;  // Obtiene el índice de la opción seleccionada
-                        const selectedOption = selectElement.options[selectedIndex];  // Obtiene la opción seleccionada
-                        const selectedText = selectedOption.textContent;  // El texto (contenido) de la opción seleccionada
-                        selectedNumberApuesta = parseInt(selectedText, 10);
-                        apostado = true;
-                        nombreApuesta = jugador.nombre;
-                        siguienteBtn.disabled = false;
-                    });
                 }
             };
 
@@ -343,6 +288,137 @@ function mostrarPantalla() {
 
         siguienteBtn.style.display = 'none';
     }
+}
+
+function renderApuestas(apuestas, rondaActual) {
+    const jugadores = viewModel.getJugadores();
+    contenido.innerHTML = '';
+
+    jugadores.forEach((jugador, index) => {
+
+        const div = document.createElement('div');
+        div.classList.add('bloque-jugador');
+        div.innerHTML = `
+            <label for="numero_${index}">
+                ¿Cuánto apuesta <b>${jugador.nombre}</b>?
+            </label>
+            <select id="numero_${index}" data-index="${index}"></select>
+        `;
+
+        contenido.appendChild(div);
+    });
+
+    configurarSelects(apuestas, rondaActual);
+}
+
+function configurarSelects(apuestas, rondaActual) {
+    const jugadores = viewModel.getJugadores();
+    const totalJugadores = jugadores.length;
+
+    const indexUltimo = totalJugadores - 1;
+
+    const totalApostado = Object.values(apuestas).reduce((a, b) => a + b, 0);
+    const jugadoresApostados = Object.keys(apuestas).length;
+
+    const sumaOtros = totalApostado - (apuestas[indexUltimo] || 0);
+    const numeroProhibido = rondaActual - sumaOtros;
+
+    // 🧹 Si el último tenía una apuesta ahora inválida → se borra
+    if (apuestas[indexUltimo] !== undefined && apuestas[indexUltimo] === numeroProhibido) {
+        delete apuestas[indexUltimo];
+    }
+
+    jugadores.forEach((jugador, index) => {
+        const select = document.getElementById(`numero_${index}`);
+        select.innerHTML = '';
+        select.disabled = false;
+
+        const esUltimo = index === indexUltimo;
+
+        if (esUltimo && jugadoresApostados < totalJugadores - 1) {
+            select.disabled = true;
+            select.selectedIndex = -1;
+            return;
+        }
+
+        for (let i = 0; i <= rondaActual; i++) {
+            if (esUltimo && i === numeroProhibido) continue;
+
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            select.appendChild(option);
+        }
+
+        if (apuestas[index] !== undefined) {
+            select.value = apuestas[index];
+        } else {
+            select.selectedIndex = -1;
+        }
+
+        select.onchange = () => {
+            apuestas[index] = parseInt(select.value);
+            configurarSelects(apuestas, rondaActual);
+        };
+    });
+
+    siguienteBtn.disabled = Object.keys(apuestas).length !== totalJugadores;
+}
+
+function renderPuntuaciones(puntuaciones, rondaActual) {
+    const jugadores = viewModel.getJugadores();
+    contenido.innerHTML = '';
+
+    jugadores.forEach((jugador, index) => {
+        const div = document.createElement('div');
+        div.classList.add('bloque-jugador');
+
+        div.innerHTML = `
+            <label for="puntos_${index}">
+                ¿Cuántas rondas ha conseguido <b>${jugador.nombre}</b>?
+            </label>
+            <select id="puntos_${index}" data-index="${index}"></select>
+        `;
+
+        contenido.appendChild(div);
+    });
+
+    configurarSelectsPuntuacion(puntuaciones, rondaActual);
+}
+
+function configurarSelectsPuntuacion(puntuaciones, rondaActual) {
+    const jugadores = viewModel.getJugadores();
+    const totalJugadores = jugadores.length;
+
+    jugadores.forEach((jugador, index) => {
+        const select = document.getElementById(`puntos_${index}`);
+        select.innerHTML = '';
+
+        for (let i = 0; i <= rondaActual; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            select.appendChild(option);
+        }
+
+        if (puntuaciones[index] !== undefined) {
+            select.value = puntuaciones[index];
+        } else {
+            select.selectedIndex = -1;
+        }
+
+        select.onchange = () => {
+            puntuaciones[index] = parseInt(select.value);
+            configurarSelectsPuntuacion(puntuaciones, rondaActual);
+        };
+    });
+
+    const valoresSeleccionados = Object.values(puntuaciones);
+    const todosSeleccionaron = valoresSeleccionados.length === totalJugadores;
+    const sumaActual = valoresSeleccionados.reduce((a, b) => a + b, 0);
+
+    // ✅ El botón solo se habilita si todos han votado y la suma coincide con la ronda
+    siguienteBtn.disabled = !(todosSeleccionaron && sumaActual === rondaActual);
 }
 
 // Inicializar la primera pantalla
