@@ -8,6 +8,7 @@ class Jugador {
 
 class Partida {
     constructor() {
+        this.id = "";
         this.jugadores = [];
         this.cartas = 0;
         this.rondas = 0;

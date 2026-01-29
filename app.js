@@ -1,12 +1,198 @@
-import { Jugador } from './model.js';
 import ViewModel from './viewModel.js';
 
 const viewModel = new ViewModel();
 const contenido = document.getElementById('contenido');
 const siguienteBtn = document.getElementById('siguienteBtn');
 
+const firebaseConfig = {
+    apiKey: "AIzaSyDYp_B-dLzwSLLWi9-VZWhiyP05OJ47vSo",
+    authDomain: "pocha-project.firebaseapp.com",
+    projectId: "pocha-project",
+    storageBucket: "pocha-project.firebasestorage.app",
+    messagingSenderId: "853380488447",
+    appId: "1:853380488447:web:47ebc22eacb39bff5900ca"
+  };
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+function mostrarMenuPrincipal() {
+
+    siguienteBtn.style.display = 'none';
+
+    contenido.innerHTML = `
+        <h2>Pocha</h2>
+        <div class="menu">
+            <button id="nuevaPartidaBtn">Nueva Partida</button>
+            <button id="cargarPartidaBtn">Cargar Partida</button>
+        </div>
+    `;
+
+    // Botones del menú
+    document.getElementById("nuevaPartidaBtn").onclick = () => partida(null);
+    document.getElementById("cargarPartidaBtn").onclick = () => mostrarListaPartidas();
+}
+
+async function mostrarListaPartidas() {
+    siguienteBtn.style.display = 'none';
+    const partidas = await listarPartidas(); // función que ya devuelve array de partidas
+
+    if (partidas.length === 0) {
+        contenido.innerHTML = `
+            <h2>Partidas guardadas</h2>
+            <p>No hay partidas disponibles.</p>
+            <button id="mostrarMenuPrincipalBtn">Volver al menú</button>
+        `;
+        document.getElementById("mostrarMenuPrincipalBtn").onclick = () => mostrarMenuPrincipal();
+        return;
+    }
+
+    // Crear tabla de partidas
+    let html = `
+        <h2>Partidas guardadas</h2>
+        <table style="width: 100%; border-collapse: collapse; margin: 0 auto;">
+            <thead>
+                <tr>
+                    <th>ID Partida</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    partidas.forEach(p => {
+        html += `
+            <tr>
+                <td>${p.id}</td>
+                <td>
+                    <button onclick="cargarPartidaSeleccionada('${p.id}')">Cargar</button>
+                    <button onclick="borrarPartidaSeleccionada('${p.id}')">Borrar</button>
+                </td>
+            </tr>
+        `;
+    });
+
+    html += `
+            </tbody>
+        </table>
+        <br>
+        <button id="mostrarMenuPrincipalBtn">Volver al menú</button>
+    `;
+
+    contenido.innerHTML = html;
+
+    document.getElementById("mostrarMenuPrincipalBtn").onclick = () => mostrarMenuPrincipal();
+
+}
+
+async function cargarPartidaSeleccionada(idPartida) {
+    const partidaFirebase = await obtenerPartidaPorId(idPartida); // función que devuelve objeto partida
+    if (!partidaFirebase) {
+        alert("No se pudo cargar la partida");
+        return;
+    }
+
+    partida(partidaFirebase);
+}
+
+async function borrarPartidaSeleccionada(idPartida) {
+    if (confirm(`¿Seguro que quieres eliminar la partida "${idPartida}"?`)) {
+        try {
+            await db.collection("partidas").doc(idPartida).delete();
+            console.log("Partida eliminada:", idPartida);
+            mostrarListaPartidas()
+        } catch (error) {
+            console.error("Error al eliminar la partida:", error);
+            alert("Error al eliminar la partida");
+        }
+    }
+}
+
+window.cargarPartidaSeleccionada = cargarPartidaSeleccionada;
+window.borrarPartidaSeleccionada = borrarPartidaSeleccionada;
+
+async function guardarPartida() {
+    try {
+        const partida = viewModel.getPartida()
+        await db.collection("partidas").doc(partida.id).set(partida);
+        console.log("Partida guardada:", partida);
+    } catch (error) {
+        console.error("Error al guardar la partida:", error);
+        alert("Error al guardar la partida");
+    }
+}
+
+async function borrarPartida(partida) {
+    try {
+        await db.collection("partidas").doc(partida.id).delete();
+        console.log("Partida eliminada:", partida.id);
+        alert("Partida eliminada correctamente");
+        mostrarListaPartidas()
+    } catch (error) {
+        console.error("Error al eliminar la partida:", error);
+        alert("Error al eliminar la partida");
+    }
+}
+
+async function listarPartidas() {
+    try {
+        const partidas = [];
+        const snapshot = await db.collection("partidas").get(); // "partidas" es tu colección en Firestore
+        snapshot.forEach(doc => {
+            partidas.push({
+                ...doc.data()     // Todos los campos de la partida
+            });
+        });
+        return partidas; // devuelve array de objetos
+    } catch (error) {
+        console.error("Error al listar partidas:", error);
+        return [];
+    }
+}
+
+async function obtenerPartidaPorId(idPartida) {
+    try {
+        const docRef = db.collection("partidas").doc(idPartida);
+        const docSnap = await docRef.get();
+
+        if (docSnap.exists) {
+            const partida = docSnap.data(); // objeto con campos de la partida
+            return partida;
+        } else {
+            console.warn("No se encontró la partida con ID:", idPartida);
+            return null;
+        }
+    } catch (error) {
+        console.error("Error al obtener partida:", error);
+        return null;
+    }
+}
+
+function nowFormatted() {
+  const d = new Date();
+
+  const pad = n => n.toString().padStart(2, '0');
+
+  const day = pad(d.getDate());
+  const month = pad(d.getMonth() + 1); // los meses empiezan en 0
+  const year = d.getFullYear();
+
+  const hours = pad(d.getHours());
+  const minutes = pad(d.getMinutes());
+  const seconds = pad(d.getSeconds());
+
+  return `${day}-${month}-${year} | ${hours}:${minutes}:${seconds}`;
+}
+
 // Función para mostrar la pantalla actual
-function mostrarPantalla() {
+function partida(partidaFirebase) {
+
+    if (!partidaFirebase) {
+        viewModel.setIdPartida(nowFormatted())
+    } else {
+        viewModel.setPartida(partidaFirebase)
+    }
+
+    siguienteBtn.style.display = '';
     const estado = viewModel.getEstado();
     const rondaActual = viewModel.getRondaActual();
     contenido.innerHTML = '';
@@ -71,7 +257,8 @@ function mostrarPantalla() {
 
         siguienteBtn.onclick = () => {
             viewModel.avanzarPantalla();
-            mostrarPantalla();
+            guardarPartida();
+            partida(viewModel.getPartida());
         };
         
     } else if (estado === 'cartas') {
@@ -93,7 +280,8 @@ function mostrarPantalla() {
                 error.style.display = 'none';
                 viewModel.agregarCartas(numeroCartas);
                 viewModel.avanzarPantalla();
-                mostrarPantalla();
+                guardarPartida();
+                partida(viewModel.getPartida());
             } else {
                 error.style.display = 'block';
             }
@@ -207,6 +395,9 @@ function mostrarPantalla() {
                                 viewModel.agregarPuntos(jugador.nombre, puntuaciones[index])
                             });
 
+                            viewModel.avanzarPantalla();
+                            guardarPartida();
+
                             contenido.innerHTML = `
                                 <h3>Puntuación</h3>
                                 <table id="tablaPuntuacion" style="width: 100%; border-collapse: collapse; margin: 0 auto;">
@@ -245,8 +436,7 @@ function mostrarPantalla() {
                                 tablaCuerpo.appendChild(fila);
 
                                 siguienteBtn.onclick = () => {
-                                    viewModel.avanzarPantalla();
-                                    mostrarPantalla();
+                                    partida(viewModel.getPartida());
                                 }
                             });
                         }
@@ -256,6 +446,13 @@ function mostrarPantalla() {
 
         };
     } else if (estado === 'fin') {
+
+        siguienteBtn.textContent = "Salir";
+        siguienteBtn.disabled = false;
+        siguienteBtn.onclick = () => { 
+            borrarPartida(viewModel.getPartida());
+            mostrarMenuPrincipal();
+        }
         
         const jugadores = viewModel.getJugadores();
 
@@ -285,8 +482,6 @@ function mostrarPantalla() {
                 <p>${nombresGanadores}</p>
             </div>
         `;
-
-        siguienteBtn.style.display = 'none';
     }
 }
 
@@ -452,4 +647,4 @@ function configurarSelectsPuntuacion(puntuaciones, rondaActual) {
 }
 
 // Inicializar la primera pantalla
-mostrarPantalla();
+mostrarMenuPrincipal();

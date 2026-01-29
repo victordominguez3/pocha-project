@@ -5,6 +5,17 @@ class ViewModel {
         this.partida = new Partida();
     }
 
+    setPartida(partida) {
+        this.partida.id = partida.id
+        this.partida.jugadores = partida.jugadores
+        this.partida.cartas = partida.cartas
+        this.partida.rondas = partida.rondas
+        this.partida.rondaActual = partida.rondaActual
+        this.partida.rondaCount = partida.rondaCount
+        this.partida.isOros = partida.isOros
+        this.partida.estado = partida.estado
+    }
+
     agregarJugador(nombre) {
         this.partida.agregarJugador(nombre);
     }
@@ -43,6 +54,27 @@ class ViewModel {
 
     getRondaActual() {
         return this.partida.rondaActual;
+    }
+
+    getPartida() {
+        return {
+            id: this.partida.id,
+            jugadores: this.partida.jugadores.map(j => ({
+                nombre: j.nombre,
+                puntos: j.puntos,
+                apuesta: j.apuesta
+            })),
+            cartas: this.partida.cartas,
+            rondas: this.partida.rondas,
+            rondaActual: this.partida.rondaActual,
+            rondaCount: this.partida.rondaCount,
+            isOros: this.partida.isOros,
+            estado: this.partida.estado
+        };
+    }
+
+    setIdPartida(id) {
+        this.partida.id = id;
     }
 }
 
