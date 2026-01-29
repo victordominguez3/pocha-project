@@ -3,6 +3,11 @@ import ViewModel from './viewModel.js';
 const viewModel = new ViewModel();
 const contenido = document.getElementById('contenido');
 const siguienteBtn = document.getElementById('siguienteBtn');
+const menuPrincipalBtn = document.getElementById('menuBtn')
+
+document.getElementById("menuBtn").addEventListener("click", () => {
+    mostrarMenuPrincipal();
+});
 
 const firebaseConfig = {
     apiKey: "AIzaSyDYp_B-dLzwSLLWi9-VZWhiyP05OJ47vSo",
@@ -16,21 +21,28 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-function mostrarMenuPrincipal() {
+export function mostrarMenuPrincipal() {
 
+    menuPrincipalBtn.style.display = 'none';
     siguienteBtn.style.display = 'none';
 
     contenido.innerHTML = `
-        <h2>Pocha</h2>
-        <div class="menu">
-            <button id="nuevaPartidaBtn">Nueva Partida</button>
-            <button id="cargarPartidaBtn">Cargar Partida</button>
+        <h2 style="margin-bottom: 30px;">Pocha</h2>
+        <div>
+            <button style="width: 150px;" class="btn" id="nuevaPartidaBtn">Nueva Partida</button>
+        </div>
+        <div style="margin-top: 20px;">
+            <button style="width: 150px;" class="btn" id="cargarPartidaBtn">Cargar Partida</button>
+        </div>
+        <div style="margin-top: 20px;">
+            <button style="width: 150px;" class="btn" id="elegirTemaBtn">Cambiar Tema</button>
         </div>
     `;
 
     // Botones del menú
     document.getElementById("nuevaPartidaBtn").onclick = () => partida(null);
     document.getElementById("cargarPartidaBtn").onclick = () => mostrarListaPartidas();
+    document.getElementById("elegirTemaBtn").onclick = () => mostrarElegirTema();
 }
 
 async function mostrarListaPartidas() {
@@ -41,7 +53,7 @@ async function mostrarListaPartidas() {
         contenido.innerHTML = `
             <h2>Partidas guardadas</h2>
             <p>No hay partidas disponibles.</p>
-            <button id="mostrarMenuPrincipalBtn">Volver al menú</button>
+            <button class="btn" id="mostrarMenuPrincipalBtn">Volver al menú</button>
         `;
         document.getElementById("mostrarMenuPrincipalBtn").onclick = () => mostrarMenuPrincipal();
         return;
@@ -49,7 +61,7 @@ async function mostrarListaPartidas() {
 
     // Crear tabla de partidas
     let html = `
-        <h2>Partidas guardadas</h2>
+        <h2 style="margin-bottom: 50px;">Partidas guardadas</h2>
         <table style="width: 100%; border-collapse: collapse; margin: 0 auto;">
             <thead>
                 <tr>
@@ -64,8 +76,8 @@ async function mostrarListaPartidas() {
             <tr>
                 <td>${p.id}</td>
                 <td>
-                    <button onclick="cargarPartidaSeleccionada('${p.id}')">Cargar</button>
-                    <button onclick="borrarPartidaSeleccionada('${p.id}')">Borrar</button>
+                    <button class="btn" style="margin-right: 10px;" onclick="cargarPartidaSeleccionada('${p.id}')">Cargar</button>
+                    <button class="btn" onclick="borrarPartidaSeleccionada('${p.id}')">Borrar</button>
                 </td>
             </tr>
         `;
@@ -75,7 +87,7 @@ async function mostrarListaPartidas() {
             </tbody>
         </table>
         <br>
-        <button id="mostrarMenuPrincipalBtn">Volver al menú</button>
+        <button class="btn" style="margin-top: 30px;" id="mostrarMenuPrincipalBtn">Volver al menú</button>
     `;
 
     contenido.innerHTML = html;
@@ -84,13 +96,53 @@ async function mostrarListaPartidas() {
 
 }
 
+function mostrarElegirTema() {
+    contenido.innerHTML = `
+    <h2>Selecciona un tema</h2>
+    <div id="selector-tema" class="grid-temas">
+    <div class="color-circulo" color-principal="#ff6666" color-principal-action="#cc0000" color-fondo="#ffe6e6" color-button-disabled="#d98c8c" color-pinta="#800000" style="background-color: #ff6666;"></div>
+    <div class="color-circulo" color-principal="#ff9966" color-principal-action="#cc6600" color-fondo="#fff0e6" color-button-disabled="#d9a380" color-pinta="#804000" style="background-color: #ff9966;"></div>
+    <div class="color-circulo" color-principal="#ffff66" color-principal-action="#cccc00" color-fondo="#ffffe6" color-button-disabled="#d9d980" color-pinta="#808000" style="background-color: #ffff66;"></div>
+    <div class="color-circulo" color-principal="#00c99d" color-principal-action="#009e7c" color-fondo="#e1fff9" color-button-disabled="#84b1a7" color-pinta="#005543" style="background-color: #00c99d;"></div>
+    <div class="color-circulo" color-principal="#33ccff" color-principal-action="#0099cc" color-fondo="#e6f7ff" color-button-disabled="#80b8d9" color-pinta="#005080" style="background-color: #33ccff;"></div>
+    <div class="color-circulo" color-principal="#6666ff" color-principal-action="#3333cc" color-fondo="#e6e6ff" color-button-disabled="#8080d9" color-pinta="#000080" style="background-color: #6666ff;"></div>
+    <div class="color-circulo" color-principal="#9933ff" color-principal-action="#6600cc" color-fondo="#f0e6ff" color-button-disabled="#b380d9" color-pinta="#400080" style="background-color: #9933ff;"></div>
+    <div class="color-circulo" color-principal="#ff66ff" color-principal-action="#cc00cc" color-fondo="#ffe6ff" color-button-disabled="#d980d9" color-pinta="#800080" style="background-color: #ff66ff;"></div>
+    <div class="color-circulo" color-principal="#ff33aa" color-principal-action="#cc0077" color-fondo="#ffe6f0" color-button-disabled="#d980b3" color-pinta="#800040" style="background-color: #ff33aa;"></div>
+    </div>
+    <br>
+    <button class="btn" style="margin-top: 30px;" id="mostrarMenuPrincipalBtn">Volver al menú</button>
+    `
+
+    const circulos = document.querySelectorAll('.color-circulo');
+
+    circulos.forEach(circulo => {
+        circulo.addEventListener('click', () => {
+            const colorPrincipal = circulo.getAttribute('color-principal');
+            const colorPrincipalAction = circulo.getAttribute('color-principal-action');
+            const colorFondo = circulo.getAttribute('color-fondo');
+            const colorButtonDisabled = circulo.getAttribute('color-button-disabled');
+            const colorPinta = circulo.getAttribute('color-pinta');
+
+            // Cambia el tema de la app dinámicamente
+            document.documentElement.style.setProperty('--color-principal', colorPrincipal);
+            document.documentElement.style.setProperty('--color-principal-action', colorPrincipalAction);
+            document.documentElement.style.setProperty('--color-fondo', colorFondo);
+            document.documentElement.style.setProperty('--color-button-disabled', colorButtonDisabled);
+            document.documentElement.style.setProperty('--color-pinta', colorPinta);
+        });
+    });
+
+    document.getElementById("mostrarMenuPrincipalBtn").onclick = () => mostrarMenuPrincipal();
+}
+
 async function cargarPartidaSeleccionada(idPartida) {
     const partidaFirebase = await obtenerPartidaPorId(idPartida); // función que devuelve objeto partida
     if (!partidaFirebase) {
         alert("No se pudo cargar la partida");
         return;
     }
-
+    siguienteBtn.disabled = false;
     partida(partidaFirebase);
 }
 
@@ -142,11 +194,22 @@ async function listarPartidas() {
                 ...doc.data()     // Todos los campos de la partida
             });
         });
+        partidas.sort((a, b) => {
+            const fa = parseFecha(a.id);
+            const fb = parseFecha(b.id);
+            return fb - fa;
+        });
         return partidas; // devuelve array de objetos
     } catch (error) {
         console.error("Error al listar partidas:", error);
         return [];
     }
+}
+
+function parseFecha(str) {
+    const [fecha, hora] = str.split(" | ");
+    const [dd, mm, yyyy] = fecha.split("-");
+    return Date.parse(`${yyyy}-${mm}-${dd}T${hora}`);
 }
 
 async function obtenerPartidaPorId(idPartida) {
@@ -186,13 +249,15 @@ function nowFormatted() {
 // Función para mostrar la pantalla actual
 function partida(partidaFirebase) {
 
+    siguienteBtn.style.display = '';
+    menuPrincipalBtn.style.display = '';
+
     if (!partidaFirebase) {
         viewModel.setIdPartida(nowFormatted())
     } else {
         viewModel.setPartida(partidaFirebase)
     }
 
-    siguienteBtn.style.display = '';
     const estado = viewModel.getEstado();
     const rondaActual = viewModel.getRondaActual();
     contenido.innerHTML = '';
@@ -203,7 +268,7 @@ function partida(partidaFirebase) {
 
         contenido.innerHTML = `
             <input type="text" id="nombre" placeholder="Nombre del jugador" />
-            <button id="agregarBtn" class="btn">Aceptar</button>
+            <button style="margin-left: 10px;" id="agregarBtn" class="btn">Aceptar</button>
             <p id="error" class="error">No puede haber dos jugadores con el mismo nombre</p>
             <h3>Jugadores ingresados:</h3>
             <table id="tablaJugadores" style="width: 100%; border-collapse: collapse; margin: 0 auto;">

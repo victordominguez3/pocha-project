@@ -1,3 +1,18 @@
+:root {
+  --color-principal: #00c99d;      /* color de fondo de botones, bordes, etc */
+  --color-principal-action: #009e7c; /* color al pasar ratón */
+  --color-fondo: #e1fff9;          /* fondo de body */
+  --color-button-disabled: #84b1a7;
+  --color-pinta: #005543;
+}
+
+#menuBtn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000; /* para que quede por encima de todo */
+}
+
 body {
   font-family: Arial, sans-serif;
   display: flex;
@@ -5,7 +20,7 @@ body {
   align-items: center; /* Centra el contenido verticalmente */
   height: 100vh; /* Usa el 100% de la altura de la pantalla */
   margin: 0; /* Elimina cualquier margen por defecto */
-  background-color: #e1fff9; /* Color de fondo */
+  background-color: var(--color-fondo); /* Color de fondo */
 }
 
 #app {
@@ -31,18 +46,17 @@ th, td {
   padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 5px;
-  background-color: #00c99d; /* Color de fondo */
+  background-color: var(--color-principal); /* Color de fondo */
   color: black; /* Color del texto */
   border: none; /* Sin bordes */
   cursor: pointer; /* Cursor de puntero */
-  margin-top: 20px; /* Espacio encima del botón */
   font-size: 16px; /* Tamaño del texto */
   border-radius: 10px; /* Bordes redondeados */
   transition: background-color 0.2s ease-in-out;
 }
 
 .btn:hover {
-  background-color: #009e7c; /* Color de fondo cuando pasas el ratón */
+  background-color: var(--color-principal-action); /* Color de fondo cuando pasas el ratón */
 }
 
 .btn:disabled {
@@ -51,7 +65,7 @@ th, td {
   padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 5px;
-  background-color: #84b1a7; /* Color de fondo */
+  background-color: var(--color-button-disabled); /* Color de fondo */
   border: none; /* Sin bordes */
   cursor: not-allowed; /* Cursor de puntero */
   margin-top: 20px; /* Espacio encima del botón */
@@ -62,7 +76,7 @@ th, td {
 input {
   height: 29px;
   padding-left: 10px;
-  border: 2px solid #00c99d; /* Borde de 2px y color verde */
+  border: 2px solid var(--color-principal); /* Borde de 2px y color verde */
   border-radius: 10px; /* Bordes redondeados */
   outline: none; /* Elimina el borde azul que aparece al hacer clic (si no lo deseas) */
   font-size: 16px; /* Tamaño del texto dentro del input */
@@ -71,7 +85,7 @@ input {
 }
 
 input:focus {
-  border-color: #009e7c; /* Color más oscuro para el borde cuando el input tiene foco */
+  border-color: var(--color-principal-action); /* Color más oscuro para el borde cuando el input tiene foco */
 }
 
 .error {
@@ -86,18 +100,18 @@ input[type="number"] {
   padding: 5px;          /* Ajusta el espaciado interno */
   font-size: 16px;       /* Cambia el tamaño de la fuente */
   text-align: center;    /* Centra el número */
-  border: 2px solid #00c99d; /* Borde de 2px de color verde */
+  border: 2px solid var(--color-principal); /* Borde de 2px de color verde */
   border-radius: 10px;   /* Bordes redondeados */
   transition: border 0.2s ease-in-out;
   margin-left: 10px;
 }
 
 input[type="number"]:focus {
-  border: 2px solid #009e7c;
+  border: 2px solid var(--color-principal-action);
 }
 
 .btnpng {
-  background-color: #00c99d; /* Color de fondo */
+  background-color: var(--color-principal); /* Color de fondo */
   color: black; /* Color del texto */
   border: 3px solid transparent; /* Sin bordes */
   cursor: pointer; /* Cursor de puntero */
@@ -107,19 +121,41 @@ input[type="number"]:focus {
 }
 
 .btnpng:hover {
-  background-color: #009e7c; /* Color de fondo cuando pasas el ratón */
+  background-color: var(--color-principal-action); /* Color de fondo cuando pasas el ratón */
 }
 
 .selected {
-  border: 3px solid #005543; /* Color dorado para el borde */
+  border: 3px solid var(--color-pinta); /* Color dorado para el borde */
 }
 
 .card {
-  border: 2px solid #00c99d;
+  border: 2px solid var(--color-principal);
   border-radius: 20px;
   padding: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 300px;
   margin: 0 auto;
   text-align: center;
+}
+
+.grid-temas {
+  display: grid;
+  grid-template-columns: repeat(3, 80px); /* 3 columnas de 80px */
+  gap: 15px; /* espacio entre círculos */
+  justify-content: center; /* centrar horizontalmente el grid */
+  margin-top: 20px;
+}
+
+.color-circulo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: transform 0.2s, border 0.2s;
+}
+
+.color-circulo:hover {
+  transform: scale(1.1);
+  border: 3px solid #333;
 }
