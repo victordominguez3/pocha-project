@@ -25,6 +25,7 @@ export function mostrarMenuPrincipal() {
 
     menuPrincipalBtn.style.display = 'none';
     siguienteBtn.style.display = 'none';
+    viewModel.setNuevaPartida()
 
     contenido.innerHTML = `
         <h2 style="margin-bottom: 30px;">Pocha</h2>

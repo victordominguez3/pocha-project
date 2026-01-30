@@ -16,6 +16,10 @@ class ViewModel {
         this.partida.estado = partida.estado
     }
 
+    setNuevaPartida() {
+        this.partida = new Partida()
+    }
+
     agregarJugador(nombre) {
         this.partida.agregarJugador(nombre);
     }
